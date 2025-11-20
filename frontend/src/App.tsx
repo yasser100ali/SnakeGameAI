@@ -4,6 +4,7 @@ import './App.css'
 import GameCanvas from './components/GameCanvas'
 import TrainingStats from './components/TrainingStats'
 import Controls from './components/Controls'
+import InfoTabs from './components/InfoTabs'
 
 interface GameState {
   snake: Array<{ x: number; y: number }>
@@ -84,26 +85,32 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🐍 Snake Game AI</h1>
-        <div className={`status ${isConnected ? 'connected' : 'disconnected'}`}>
-          {isConnected ? '● Connected' : '○ Disconnected'}
-        </div>
+        <h1>Snake Game AI</h1>
+        <p>Realtime reinforcement learning</p>
       </header>
 
       <div className="main-content">
-        <div className="game-section">
-          <GameCanvas gameState={gameState} />
-          <Controls
-            isTraining={isTraining}
-            isConnected={isConnected}
-            onStartTraining={handleStartTraining}
-            onStopTraining={handleStopTraining}
-            onReset={handleReset}
-          />
+        <div className="game-stage">
+          <div className="game-section">
+            <GameCanvas gameState={gameState} />
+          </div>
+          <div className="controls-section">
+            <Controls
+              isTraining={isTraining}
+              isConnected={isConnected}
+              onStartTraining={handleStartTraining}
+              onStopTraining={handleStopTraining}
+              onReset={handleReset}
+            />
+          </div>
         </div>
 
         <div className="stats-section">
           <TrainingStats trainingData={trainingData} />
+        </div>
+
+        <div className="info-section">
+          <InfoTabs />
         </div>
       </div>
     </div>

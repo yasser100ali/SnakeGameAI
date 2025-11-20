@@ -1,66 +1,60 @@
 .app {
   min-height: 100vh;
   background: #05070d;
-  padding: 3rem clamp(1rem, 4vw, 4rem);
+  padding: clamp(2rem, 5vw, 4rem);
   color: #f5f6fa;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid #1b1f27;
-  padding-bottom: 1.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 .header h1 {
   margin: 0;
-  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 700;
-  letter-spacing: 0.6em;
-  color: #f5f6fa;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
 }
 
-.status {
-  font-size: 0.85rem;
+.header p {
+  margin-top: 0.5rem;
+  color: #9fa5b4;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #a5acba;
-}
-
-.status.connected {
-  color: #ced4e2;
-}
-
-.status.disconnected {
-  color: #ff6b6b;
+  font-size: 0.85rem;
 }
 
 .main-content {
-  display: grid;
-  grid-template-columns: minmax(360px, 520px) 1fr;
-  gap: 2rem;
-  max-width: 1400px;
+  max-width: 1000px;
   margin: 0 auto;
-}
-
-.game-section,
-.stats-section {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-@media (max-width: 1024px) {
-  .main-content {
-    grid-template-columns: 1fr;
-  }
+.game-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
 
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+.game-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.controls-section {
+  width: min(100%, 900px);
+}
+
+.stats-section {
+  width: 100%;
+}
+
+.info-section {
+  width: 100%;
 }

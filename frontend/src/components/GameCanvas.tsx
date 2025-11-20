@@ -78,11 +78,6 @@ const GameCanvas = ({ gameState }: GameCanvasProps) => {
     ctx.textAlign = 'left'
     ctx.fillText(`Score: ${gameState.score}`, 10, 26)
 
-    // Draw direction indicator
-    ctx.fillStyle = '#9fa5b4'
-    ctx.font = '12px "Space Mono", monospace'
-    ctx.fillText(`Direction: ${gameState.direction}`, 10, 46)
-
     // Draw game over message
     if (gameState.game_over) {
       ctx.fillStyle = 'rgba(5, 6, 12, 0.85)'
