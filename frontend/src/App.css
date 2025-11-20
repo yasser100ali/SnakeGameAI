@@ -1,0 +1,66 @@
+.app {
+  min-height: 100vh;
+  background: #05070d;
+  padding: 3rem clamp(1rem, 4vw, 4rem);
+  color: #f5f6fa;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #1b1f27;
+  padding-bottom: 1.5rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.6em;
+  color: #f5f6fa;
+  text-transform: uppercase;
+}
+
+.status {
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #a5acba;
+}
+
+.status.connected {
+  color: #ced4e2;
+}
+
+.status.disconnected {
+  color: #ff6b6b;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: minmax(360px, 520px) 1fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.game-section,
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

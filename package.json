@@ -1,0 +1,21 @@
+{
+  "name": "snake-game-ai",
+  "version": "1.0.0",
+  "description": "Snake Game AI with React frontend and Python backend",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install:all": "pnpm install && cd backend && pip install -r requirements.txt",
+    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "dev:frontend": "cd frontend && pnpm dev",
+    "dev:backend": "cd backend && python app.py",
+    "build": "cd frontend && pnpm build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+
