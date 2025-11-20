@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd frontend && pnpm install && pnpm build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "frontend/dist",
+  "framework": "vite",
+  "env": {
+    "VITE_BACKEND_URL": "@backend_url"
+  }
+}
+

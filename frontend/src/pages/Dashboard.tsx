@@ -32,7 +32,8 @@ const Dashboard = () => {
   const [speed, setSpeed] = useState<SpeedLabel>('1x')
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5001', {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001'
+    const newSocket = io(backendUrl, {
       transports: ['websocket', 'polling'],
     })
 

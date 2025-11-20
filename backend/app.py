@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import threading
 import time
+import os
 from snake_game_headless import SnakeGameAI, Direction, Point
 from agent import Agent
 
@@ -207,6 +208,7 @@ def health():
 
 
 if __name__ == '__main__':
-    print("Starting Snake Game AI Backend on http://localhost:5001")
-    socketio.run(app, host='0.0.0.0', port=5001, debug=False, allow_unsafe_werkzeug=True)
+    port = int(os.environ.get('PORT', 5001))
+    print(f"Starting Snake Game AI Backend on port {port}")
+    socketio.run(app, host='0.0.0.0', port=port, debug=False, allow_unsafe_werkzeug=True)
 
