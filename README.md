@@ -13,7 +13,8 @@ A modern web-based Snake Game with an AI agent that learns to play using reinfor
 - **📊 Live Training Statistics**: Real-time charts and metrics showing training progress
 - **🔌 WebSocket Communication**: Instant updates between backend and frontend
 - **⚡ Fast Training**: Headless mode for efficient AI training
-- **🎯 Training Controls**: Start/stop training and reset game from the UI
+- **🎯 Training Controls**: Start/stop training, reset the game, and adjust speed (1× / 3× / 10×)
+- **📚 Learn Page**: Dedicated “How it works” page explaining the full Q-Learning loop and math
 
 ## 🏗️ Architecture
 
@@ -71,7 +72,7 @@ pnpm dev
 ```
 
 This command will:
-- Start the Flask backend on `http://localhost:5000`
+- Start the Flask backend on `http://localhost:5001`
 - Start the React frontend on `http://localhost:5173`
 - Open your browser automatically to the frontend
 
@@ -87,12 +88,11 @@ pnpm dev:frontend
 
 ### Using the Application
 
-1. Open your browser to `http://localhost:5173`
-2. Click **"▶ Start Training"** to begin AI training
-3. Watch the snake learn to play in real-time!
-4. View training statistics and score charts on the right panel
-5. Click **"⏸ Stop Training"** to pause
-6. Click **"🔄 Reset Game"** to restart (when not training)
+1. Open `http://localhost:5173` for the dashboard (game, stats, controls).
+2. Use the **Start/Stop** buttons to control training.
+3. Choose a speed profile (1×, 3×, 10×) to slow down or accelerate the learning loop.
+4. Track performance in the live stats and score history chart.
+5. Visit `http://localhost:5173/learn` to read the detailed breakdown of the algorithm, reward shaping, and Q-learning math.
 
 ## 📦 Project Structure
 
@@ -100,11 +100,9 @@ pnpm dev:frontend
 SnakeGameAI/
 ├── frontend/                 # React TypeScript frontend
 │   ├── src/
-│   │   ├── components/       # React components
-│   │   │   ├── GameCanvas.tsx       # Game visualization
-│   │   │   ├── TrainingStats.tsx    # Statistics & charts
-│   │   │   └── Controls.tsx         # Control buttons
-│   │   ├── App.tsx          # Main app component
+│   │   ├── components/       # React components (canvas, stats, controls, info tabs)
+│   │   ├── pages/            # Routed pages (Dashboard, Learn)
+│   │   ├── App.tsx           # Router & navigation shell
 │   │   └── main.tsx         # Entry point
 │   ├── package.json
 │   └── vite.config.ts       # Vite configuration
@@ -148,19 +146,22 @@ The AI uses **Deep Q-Learning**, a reinforcement learning technique:
 
 ## 🎮 Game Controls
 
-The game is controlled by the AI agent, but you can:
+The AI controls the snake, but you can:
 - **Start Training**: Begin the AI training loop
-- **Stop Training**: Pause training (keeps current progress)
-- **Reset Game**: Reset the game state (only when not training)
+- **Stop Training**: Pause training (keeps progress)
+- **Reset Game**: Reset the board (only when idle)
+- **Training Speed**: Toggle between 1× (slow/visual), 3×, and 10× playback to match your preference
 
-## 📊 Training Metrics
+## 📊 Training Metrics & Learn Page
 
-The UI displays:
-- **Current Game**: Number of games played
-- **Last Score**: Score from the most recent game
-- **Record**: Highest score achieved
-- **Average Score**: Mean score across all games
-- **Score History Chart**: Visual representation of learning progress
+Dashboard metrics include:
+- **Games**: Total episodes completed
+- **Last Score**: Score from the most recent episode
+- **Best**: Record high score
+- **Average**: Rolling mean across games
+- **Score History**: Live chart of score vs. average
+
+Need more theory? Navigate to `/learn` for deeper explanations of the observation space, reward shaping, replay buffer, and the Bellman update that powers the Q-network.
 
 ## 🛠️ Development
 

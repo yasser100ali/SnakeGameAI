@@ -7,11 +7,11 @@ const tabs = [
     label: 'How it works',
     title: 'Training loop',
     content: [
-      '1. Observe state (danger flags, direction, food position).',
-      '2. Choose an action via epsilon-greedy policy.',
-      '3. Step game, receive reward (+10 food, -10 collision, otherwise -0.1).',
-      '4. Store experience and train Q-network on mini-batches.',
-      '5. Update stats + repeat until termination.',
+      'Observe the 11-feature state vector (danger rays, heading one-hot, food offset).',
+      'Select an action with an epsilon-greedy policy to balance exploration vs exploitation.',
+      'Advance the environment, collect rewards (+10 food, -10 collision, -0.1 per move).',
+      'Store (state, action, reward, next_state, done) tuples inside replay memory.',
+      'Sample mini-batches to train the Q-network and repeat for the next frame.',
     ],
   },
   {
@@ -19,11 +19,11 @@ const tabs = [
     label: 'Q-learning math',
     title: 'Bellman update',
     content: [
-      'Q(s, a) ← Q(s, a) + α [ r + γ · maxₐ′ Q(s′, a′) − Q(s, a) ]',
-      'State vector: 11 binary features (danger + direction + food).',
-      'Model: Linear_QNet(11 → 256 → 3) optimized with Adam (lr=0.001).',
-      'Discount γ = 0.9 balances immediate vs future rewards.',
-      'Replay memory (100k) + mini-batch (1k) stabilize updates.',
+      'Q(s, a) ← Q(s, a) + α [ r + γ · maxₐ′ Q(s′, a′) − Q(s, a) ] is the Bellman update.',
+      'Input dimension: 11 binary signals → hidden layer 256 ReLU units → 3 Q-values.',
+      'Optimizer: Adam (lr 0.001) minimizing SmoothL1 between predicted and target Q.',
+      'Discount γ = 0.9 keeps the agent farsighted without ignoring immediate food.',
+      'Replay memory (100k) and 1k-sized batches reduce correlation and variance.',
     ],
   },
 ]

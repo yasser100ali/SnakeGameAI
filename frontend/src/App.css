@@ -1,6 +1,45 @@
-.app {
+.app-shell {
   min-height: 100vh;
   background: #05070d;
+  color: #f5f6fa;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem clamp(1rem, 5vw, 4rem);
+  border-bottom: 1px solid #1b1f27;
+}
+
+.brand {
+  font-size: 1rem;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.8rem;
+  color: #777f92;
+  text-decoration: none;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link.active {
+  color: #f5f6fa;
+  border-color: #f5f6fa;
+}
+
+.app {
+  min-height: calc(100vh - 70px);
   padding: clamp(2rem, 5vw, 4rem);
   color: #f5f6fa;
 }
@@ -52,9 +91,5 @@
 }
 
 .stats-section {
-  width: 100%;
-}
-
-.info-section {
   width: 100%;
 }

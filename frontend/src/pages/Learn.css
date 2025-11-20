@@ -1,0 +1,88 @@
+.learn-page {
+  min-height: 100vh;
+  background: #05070d;
+  color: #f5f6fa;
+  padding: clamp(2rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.learn-hero {
+  max-width: 900px;
+}
+
+.learn-hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: #9fa5b4;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.learn-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.learn-hero p {
+  color: #c4c9d9;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.learn-grid article {
+  background: #070a12;
+  border: 1px solid #1b1f27;
+  padding: 1.5rem;
+}
+
+.learn-grid h2 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #a5acba;
+}
+
+.learn-grid ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.learn-grid li {
+  color: #f5f6fa;
+  line-height: 1.5;
+}
+
+.formula-card {
+  background: #070a12;
+  border: 1px solid #1b1f27;
+  padding: 1.5rem;
+}
+
+.formula-card h2 {
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #a5acba;
+}
+
+.formula-card p {
+  color: #f5f6fa;
+  line-height: 1.7;
+  margin: 0 0 1rem 0;
+}
+

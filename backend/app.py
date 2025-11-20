@@ -25,6 +25,21 @@ training_stats = {
     'mean_scores': []
 }
 
+BASE_DELAY = 0.06  # seconds
+SPEED_OPTIONS = {
+    '1x': {'label': '1x', 'multiplier': 1},
+    '3x': {'label': '3x', 'multiplier': 3},
+    '10x': {'label': '10x', 'multiplier': 10},
+}
+current_speed = SPEED_OPTIONS['1x']
+
+
+def get_speed_payload():
+    return {
+        'label': current_speed['label'],
+        'multiplier': current_speed['multiplier'],
+    }
+
 
 def serialize_game_state(game):
     """Convert game state to JSON-serializable format"""
@@ -39,7 +54,7 @@ def serialize_game_state(game):
 
 def training_loop():
     """Main training loop that runs in a separate thread"""
-    global training_active, agent, game, training_stats
+    global training_active, agent, game, training_stats, current_speed
     
     plot_scores = []
     plot_mean_scores = []
@@ -100,7 +115,8 @@ def training_loop():
             socketio.emit('training_update', training_stats)
         
         # Small delay to control speed and reduce CPU usage
-        time.sleep(0.01)
+        delay = max(BASE_DELAY / current_speed['multiplier'], 0.002)
+        time.sleep(delay)
     
     print("Training stopped.")
 
@@ -109,6 +125,7 @@ def training_loop():
 def handle_connect():
     print('Client connected')
     emit('training_status', {'is_training': training_active})
+    emit('speed_update', get_speed_payload())
     if training_stats['game_number'] > 0:
         emit('training_update', training_stats)
 
@@ -149,6 +166,19 @@ def handle_reset_game():
         game_state = serialize_game_state(game)
         socketio.emit('game_state', game_state, broadcast=True)
         print("Game reset by client")
+
+
+@socketio.on('set_speed')
+def handle_set_speed(data):
+    global current_speed
+    label = data.get('label')
+    if not label:
+        return
+    if label not in SPEED_OPTIONS:
+        return
+    current_speed = SPEED_OPTIONS[label]
+    socketio.emit('speed_update', get_speed_payload(), broadcast=True)
+    print(f"Training speed set to {label}")
 
 
 @app.route('/')
