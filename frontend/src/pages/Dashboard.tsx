@@ -71,10 +71,18 @@ const Dashboard = () => {
     }
   }, [])
 
-  const handleStartTraining = () => socket?.emit('start_training')
-  const handleStopTraining = () => socket?.emit('stop_training')
-  const handleReset = () => socket?.emit('reset_game')
-  const handleSpeedChange = (label: SpeedLabel) => socket?.emit('set_speed', { label })
+  const handleStartTraining = () => {
+    socket?.emit('start_training')
+  }
+  
+  const handleStopTraining = () => {
+    socket?.emit('stop_training')
+  }
+  
+  const handleSpeedChange = (label: SpeedLabel) => {
+    console.log('Speed change requested:', label)
+    socket?.emit('set_speed', { label })
+  }
 
   return (
     <div className="app">
@@ -94,7 +102,6 @@ const Dashboard = () => {
               isConnected={isConnected}
               onStartTraining={handleStartTraining}
               onStopTraining={handleStopTraining}
-              onReset={handleReset}
               speedLabel={speed}
               onSpeedChange={handleSpeedChange}
             />

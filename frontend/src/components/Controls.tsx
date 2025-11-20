@@ -8,7 +8,6 @@ interface ControlsProps {
   speedLabel: SpeedLabel
   onStartTraining: () => void
   onStopTraining: () => void
-  onReset: () => void
   onSpeedChange: (label: SpeedLabel) => void
 }
 
@@ -24,28 +23,11 @@ const Controls = ({
   speedLabel,
   onStartTraining,
   onStopTraining,
-  onReset,
   onSpeedChange,
 }: ControlsProps) => {
-  const actionButton = !isTraining ? (
-    <button onClick={onStartTraining} disabled={!isConnected} className="btn primary">
-      Start training
-    </button>
-  ) : (
-    <button onClick={onStopTraining} disabled={!isConnected} className="btn danger">
-      Stop training
-    </button>
-  )
-
   return (
     <div className="controls-container">
       <h3>Controls</h3>
-      <div className="button-group">
-        {actionButton}
-        <button onClick={onReset} disabled={!isConnected || isTraining} className="btn muted">
-          Reset game
-        </button>
-      </div>
 
       <div className="speed-section">
         <div className="speed-label">Training speed</div>
@@ -62,6 +44,18 @@ const Controls = ({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="button-group">
+        {!isTraining ? (
+          <button onClick={onStartTraining} disabled={!isConnected} className="btn primary">
+            Start training
+          </button>
+        ) : (
+          <button onClick={onStopTraining} disabled={!isConnected} className="btn danger">
+            Stop training
+          </button>
+        )}
       </div>
 
       <div className="training-info">

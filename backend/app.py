@@ -14,6 +14,8 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 # Global state
 training_thread = None
 training_active = False
+training_speed = 1.0  # Speed multiplier (1x, 3x, 10x)
+user_set_speed = False  # Track if user manually set speed (disables auto-adjust)
 agent = None
 game = None
 training_stats = {
@@ -54,12 +56,13 @@ def serialize_game_state(game):
 
 def training_loop():
     """Main training loop that runs in a separate thread"""
-    global training_active, agent, game, training_stats, current_speed
+    global training_active, training_speed, agent, game, training_stats, current_speed, user_set_speed
     
     plot_scores = []
     plot_mean_scores = []
     total_score = 0
     record = 0
+    user_set_speed = False  # Reset flag at start of training
     
     agent = Agent()
     game = SnakeGameAI(headless=True)
@@ -67,6 +70,19 @@ def training_loop():
     print("Training started...")
     
     while training_active:
+        # Auto-adjust speed if user hasn't manually set it
+        if not user_set_speed:
+            if agent.n_games < 75:
+                # Games 1-75: Use 10x speed
+                if current_speed['label'] != '10x':
+                    current_speed = SPEED_OPTIONS['10x']
+                    socketio.emit('speed_update', get_speed_payload(), broadcast=True)
+            else:
+                # After game 75: Use 3x speed
+                if current_speed['label'] != '3x':
+                    current_speed = SPEED_OPTIONS['3x']
+                    socketio.emit('speed_update', get_speed_payload(), broadcast=True)
+        
         # Get old state
         state_old = agent.get_state(game)
         
@@ -137,9 +153,13 @@ def handle_disconnect():
 
 @socketio.on('start_training')
 def handle_start_training():
-    global training_thread, training_active
+    global training_thread, training_active, agent, game, user_set_speed
     
     if not training_active:
+        # Reset training state for fresh start
+        agent = None
+        game = None
+        user_set_speed = False  # Reset speed flag for new training session
         training_active = True
         training_thread = threading.Thread(target=training_loop, daemon=True)
         training_thread.start()
@@ -157,26 +177,21 @@ def handle_stop_training():
         print("Training stopped by client")
 
 
-@socketio.on('reset_game')
-def handle_reset_game():
-    global game, training_stats
-    
-    if game and not training_active:
-        game.reset()
-        game_state = serialize_game_state(game)
-        socketio.emit('game_state', game_state, broadcast=True)
-        print("Game reset by client")
-
-
 @socketio.on('set_speed')
 def handle_set_speed(data):
-    global current_speed
+    global current_speed, training_active, user_set_speed
     label = data.get('label')
     if not label:
         return
     if label not in SPEED_OPTIONS:
         return
     current_speed = SPEED_OPTIONS[label]
+    
+    # Mark that user manually set speed (disable auto-speed adjustment)
+    if training_active:
+        user_set_speed = True
+        print(f"User manually set speed to {label} - disabling auto-adjust")
+    
     socketio.emit('speed_update', get_speed_payload(), broadcast=True)
     print(f"Training speed set to {label}")
 
