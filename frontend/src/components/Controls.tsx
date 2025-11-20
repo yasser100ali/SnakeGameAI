@@ -3,11 +3,8 @@ import './Controls.css'
 export type SpeedLabel = '1x' | '3x' | '10x'
 
 interface ControlsProps {
-  isTraining: boolean
   isConnected: boolean
   speedLabel: SpeedLabel
-  onStartTraining: () => void
-  onStopTraining: () => void
   onSpeedChange: (label: SpeedLabel) => void
 }
 
@@ -18,11 +15,8 @@ const speedOptions: { label: SpeedLabel; caption: string }[] = [
 ]
 
 const Controls = ({
-  isTraining,
   isConnected,
   speedLabel,
-  onStartTraining,
-  onStopTraining,
   onSpeedChange,
 }: ControlsProps) => {
   return (
@@ -43,31 +37,6 @@ const Controls = ({
               <small>{option.caption}</small>
             </button>
           ))}
-        </div>
-      </div>
-
-      <div className="button-group">
-        {!isTraining ? (
-          <button onClick={onStartTraining} disabled={!isConnected} className="btn primary">
-            Start training
-          </button>
-        ) : (
-          <button onClick={onStopTraining} disabled={!isConnected} className="btn danger">
-            Stop training
-          </button>
-        )}
-      </div>
-
-      <div className="training-info">
-        <div className="info-item">
-          <span className="label">Status</span>
-          <span className={`value ${isTraining ? 'active' : 'inactive'}`}>
-            {isTraining ? 'Running' : 'Idle'}
-          </span>
-        </div>
-        <div className="info-item">
-          <span className="label">Speed</span>
-          <span className="value">{speedLabel}</span>
         </div>
       </div>
     </div>

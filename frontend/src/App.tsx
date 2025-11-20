@@ -7,7 +7,7 @@ const App = () => (
   <BrowserRouter>
     <div className="app-shell">
       <nav className="top-nav">
-        <div className="brand">Snake AI</div>
+        <div className="brand" onClick={() => window.location.reload()} style={{ cursor: 'pointer' }}>Snake AI</div>
         <div className="nav-links">
           <NavLink
             to="/"

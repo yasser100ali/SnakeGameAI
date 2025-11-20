@@ -28,7 +28,6 @@ const Dashboard = () => {
   const [socket, setSocket] = useState<Socket | null>(null)
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [trainingData, setTrainingData] = useState<TrainingData | null>(null)
-  const [isTraining, setIsTraining] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
   const [speed, setSpeed] = useState<SpeedLabel>('1x')
 
@@ -53,10 +52,6 @@ const Dashboard = () => {
       setTrainingData(data)
     })
 
-    newSocket.on('training_status', (data: { is_training: boolean }) => {
-      setIsTraining(data.is_training)
-    })
-
     newSocket.on('speed_update', (data: { label: string }) => {
       const label = SPEED_CHOICES.includes(data.label as SpeedLabel)
         ? (data.label as SpeedLabel)
@@ -66,21 +61,20 @@ const Dashboard = () => {
 
     setSocket(newSocket)
 
+    // Auto-start training when connected
+    newSocket.on('connect', () => {
+      setIsConnected(true)
+      newSocket.emit('start_training')
+    })
+
     return () => {
       newSocket.close()
     }
   }, [])
 
-  const handleStartTraining = () => {
-    socket?.emit('start_training')
-  }
-  
-  const handleStopTraining = () => {
-    socket?.emit('stop_training')
-  }
-  
   const handleSpeedChange = (label: SpeedLabel) => {
     console.log('Speed change requested:', label)
+    setSpeed(label) // Update immediately for responsive UI
     socket?.emit('set_speed', { label })
   }
 
@@ -88,7 +82,7 @@ const Dashboard = () => {
     <div className="app">
       <header className="header">
         <h1>Snake Game AI</h1>
-        <p>REALTIME REINFORCEMENT LEARNING</p>
+        <p>REALTIME REINFORCEMENT LEARNING, improves over time</p>
       </header>
 
       <div className="main-content">
@@ -98,10 +92,7 @@ const Dashboard = () => {
           </div>
           <div className="controls-section">
             <Controls
-              isTraining={isTraining}
               isConnected={isConnected}
-              onStartTraining={handleStartTraining}
-              onStopTraining={handleStopTraining}
               speedLabel={speed}
               onSpeedChange={handleSpeedChange}
             />
