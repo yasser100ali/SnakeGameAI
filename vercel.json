@@ -1,7 +1,5 @@
 {
   "buildCommand": "cd frontend && pnpm install && pnpm build",
   "installCommand": "cd frontend && pnpm install",
-  "outputDirectory": "frontend/dist",
-  "ignoreCommand": "exit 0"
+  "outputDirectory": "frontend/dist"
 }
-
