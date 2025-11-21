@@ -17,6 +17,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 # Global state
 training_thread = None
 training_active = False
+connected_clients = 0
 training_speed = 1.0  # Speed multiplier (1x, 3x, 10x)
 user_set_speed = False  # Track if user manually set speed (disables auto-adjust)
 agent = None
@@ -142,7 +143,23 @@ def training_loop():
 
 @socketio.on('connect')
 def handle_connect():
-    print('Client connected')
+    global connected_clients, training_active, training_thread, agent, game, user_set_speed
+
+    connected_clients += 1
+    print(f'Client connected. Total clients: {connected_clients}')
+
+    # Start training if this is the first client and training isn't active
+    if connected_clients > 0 and not training_active:
+        # Reset training state for fresh start
+        agent = None
+        game = None
+        user_set_speed = False  # Reset speed flag for new training session
+        training_active = True
+        training_thread = threading.Thread(target=training_loop, daemon=True)
+        training_thread.start()
+        socketio.emit('training_status', {'is_training': True})
+        print("Training auto-started (clients connected)")
+
     emit('training_status', {'is_training': training_active})
     emit('speed_update', get_speed_payload())
     if training_stats['game_number'] > 0:
@@ -151,7 +168,17 @@ def handle_connect():
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    print('Client disconnected')
+    global connected_clients, training_active
+
+    if connected_clients > 0:
+        connected_clients -= 1
+    print(f'Client disconnected. Total clients: {connected_clients}')
+
+    # Stop training if no clients are connected
+    if connected_clients == 0 and training_active:
+        training_active = False
+        socketio.emit('training_status', {'is_training': False})
+        print("Training auto-stopped (no clients)")
 
 
 @socketio.on('start_training')
