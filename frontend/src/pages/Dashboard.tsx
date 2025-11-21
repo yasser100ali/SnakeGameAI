@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 import GameCanvas from '../components/GameCanvas'
-import Controls, { type SpeedLabel } from '../components/Controls'
 import TrainingStats from '../components/TrainingStats'
 import '../App.css'
 
@@ -22,27 +21,14 @@ interface TrainingData {
   mean_scores: number[]
 }
 
-const SPEED_CHOICES: SpeedLabel[] = ['1x', '3x', '10x']
-
 const Dashboard = () => {
-  const [socket, setSocket] = useState<Socket | null>(null)
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [trainingData, setTrainingData] = useState<TrainingData | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
-  const [speed, setSpeed] = useState<SpeedLabel>('1x')
 
   useEffect(() => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001'
     const newSocket = io(backendUrl, {
       transports: ['websocket', 'polling'],
-    })
-
-    newSocket.on('connect', () => {
-      setIsConnected(true)
-    })
-
-    newSocket.on('disconnect', () => {
-      setIsConnected(false)
     })
 
     newSocket.on('game_state', (data: GameState) => {
@@ -53,18 +39,8 @@ const Dashboard = () => {
       setTrainingData(data)
     })
 
-    newSocket.on('speed_update', (data: { label: string }) => {
-      const label = SPEED_CHOICES.includes(data.label as SpeedLabel)
-        ? (data.label as SpeedLabel)
-        : '1x'
-      setSpeed(label)
-    })
-
-    setSocket(newSocket)
-
     // Auto-start training when connected
     newSocket.on('connect', () => {
-      setIsConnected(true)
       newSocket.emit('start_training')
     })
 
@@ -72,12 +48,6 @@ const Dashboard = () => {
       newSocket.close()
     }
   }, [])
-
-  const handleSpeedChange = (label: SpeedLabel) => {
-    console.log('Speed change requested:', label)
-    setSpeed(label) // Update immediately for responsive UI
-    socket?.emit('set_speed', { label })
-  }
 
   return (
     <div className="app">
@@ -90,13 +60,6 @@ const Dashboard = () => {
         <div className="game-stage">
           <div className="game-section">
             <GameCanvas gameState={gameState} />
-          </div>
-          <div className="controls-section">
-            <Controls
-              isConnected={isConnected}
-              speedLabel={speed}
-              onSpeedChange={handleSpeedChange}
-            />
           </div>
         </div>
 
