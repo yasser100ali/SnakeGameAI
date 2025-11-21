@@ -77,12 +77,12 @@ def training_loop():
                 # Games 1-75: Use 10x speed
                 if current_speed['label'] != '10x':
                     current_speed = SPEED_OPTIONS['10x']
-                    socketio.emit('speed_update', get_speed_payload(), broadcast=True)
+                    socketio.emit('speed_update', get_speed_payload())
             else:
                 # After game 75: Use 3x speed
                 if current_speed['label'] != '3x':
                     current_speed = SPEED_OPTIONS['3x']
-                    socketio.emit('speed_update', get_speed_payload(), broadcast=True)
+                    socketio.emit('speed_update', get_speed_payload())
         
         # Get old state
         state_old = agent.get_state(game)
@@ -164,7 +164,7 @@ def handle_start_training():
         training_active = True
         training_thread = threading.Thread(target=training_loop, daemon=True)
         training_thread.start()
-        socketio.emit('training_status', {'is_training': True}, broadcast=True)
+        socketio.emit('training_status', {'is_training': True})
         print("Training started by client")
 
 
@@ -174,7 +174,7 @@ def handle_stop_training():
     
     if training_active:
         training_active = False
-        socketio.emit('training_status', {'is_training': False}, broadcast=True)
+        socketio.emit('training_status', {'is_training': False})
         print("Training stopped by client")
 
 
@@ -193,7 +193,7 @@ def handle_set_speed(data):
         user_set_speed = True
         print(f"User manually set speed to {label} - disabling auto-adjust")
     
-    socketio.emit('speed_update', get_speed_payload(), broadcast=True)
+    socketio.emit('speed_update', get_speed_payload())
     print(f"Training speed set to {label}")
 
 
